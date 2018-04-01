@@ -11,7 +11,7 @@
   - name: Adding Kubernetes repository to the system including gpkg keys
     yum_repository:
       name: kubernetes
-      description: Kubernetes YUM repository
+      description:Kubernetes
       baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-$basearch
       enabled: yes
       gpgcheck: yes
@@ -21,6 +21,8 @@
     selinux:
       policy: targeted
       state: permissive
+  - name: update system
+    yum: name='*' state=lates update_cache=yes
   - name: Installing the required packages now
     yum: name={{ item }} state=present update_cache=yes
     with_items: "{{ PACKAGES }}"
