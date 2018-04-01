@@ -1,5 +1,5 @@
-# This project is created to do poc for many new latest techonolgies
-# This project may also include code releated to the poc
+# This project is created to do poc for many new latest technology
+# This project may also include code releated development to the achieve the required poc by Prasanth Katta
 
 
 # Author : Prasanth Katta
