@@ -22,7 +22,7 @@
       policy: targeted
       state: permissive
   - name: update system
-    yum: name='*' state=lates update_cache=yes
+    yum: name='*' state=latest update_cache=yes
   - name: Installing the required packages now
     yum: name={{ item }} state=present update_cache=yes
     with_items: "{{ PACKAGES }}"
