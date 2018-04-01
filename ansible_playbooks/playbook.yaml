@@ -26,3 +26,9 @@
   - name: Installing the required packages now
     yum: name={{ item }} state=present update_cache=yes
     with_items: "{{ PACKAGES }}"
+  - name: Enable Kubelet
+    systemd: name=kubelet state=started enabled=yes
+  - name: Enable Kubectl
+    systemd: name=kubectl state=started enabled=yes
+  - name: Enabled Kubeadm
+    systemd: name=kubeadm state=started enabled=yes
