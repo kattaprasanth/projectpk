@@ -1,6 +1,8 @@
 ---
 
 - hosts: all
+  user: prasanth
+  connection: ssh
   become: true
   vars_files:
      - vars.yaml
@@ -20,7 +22,5 @@
       policy: targeted
       state: permissive
   - name: Installing the required packages now
-    yum: 
-      name: {{ item }}
-      state: present
+    yum: name={{ item }} state=present update_cache=yes
     with_items: "{{ PACKAGES }}"
