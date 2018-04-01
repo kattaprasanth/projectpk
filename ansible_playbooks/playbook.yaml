@@ -1,0 +1,26 @@
+---
+
+- hosts: all
+  become: true
+  vars_files:
+     - vars.yaml
+  strategy: free
+  tasks:
+  - name: Adding Kubernetes repository to the system including gpkg keys
+    yum_repository:
+      name: kubernetes
+      description: Kubernetes YUM repository
+      baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-$basearch
+      enabled: yes
+      gpgcheck: yes
+      repo_gpgcheck: yes
+      gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+  - name: setting SELinux to premissive mode
+    selinux:
+      policy: targeted
+      state: permissive
+  - name: Installing the required packages now
+    yum: 
+      name: {{ item }}
+      state: present
+    with_items: "{{ PACKAGES }}"
