@@ -43,3 +43,7 @@
   - name: Configure cgroup driver used by kubelet
     shell: sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
     when: docker_cgroup.stdout != kubeadm_cgroup.stdout
+  - name: Reload the daemon
+    systemd: name=daemon-reload state=reloaded
+  - name: Restart Kubelet
+    systemd: name=kubelet state=restarted
