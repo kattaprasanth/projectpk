@@ -19,10 +19,10 @@
     selinux:
       policy: targeted
       state: permissive
-  - name: update system
-    yum: name='*' state=latest update_cache=yes
   - name: Installing the required packages now
     yum: name={{ item }} state=present update_cache=yes
     with_items: "{{ PACKAGES }}"
+  - name: Enable and Start Docker
+    systemd: name=docker state=started enabled=yes
   - name: Enable Kubelet
     systemd: name=kubelet state=started enabled=yes
