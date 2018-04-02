@@ -26,3 +26,20 @@
     systemd: name=docker state=started enabled=yes
   - name: Enable Kubelet
     systemd: name=kubelet state=started enabled=yes
+  - name: traffic route fix
+    shell: |
+        cat <<EOF >  /etc/sysctl.d/k8s.conf
+        net.bridge.bridge-nf-call-ip6tables = 1
+        net.bridge.bridge-nf-call-iptables = 1
+        EOF
+        
+        sysctl --system
+  - name: collecting cgroup info of docker
+    shell: docker info | grep -i cgroup
+    register: docker_cgroup
+  - name: collecting cgroup info of installed kubeadm
+    shell: cat /etc/systemd/system/kubelet.service.d/10-kubeadm.conf | grep "cgroup-driver="
+    register: kubeadm_cgroup
+  - name: Configure cgroup driver used by kubelet
+    shell: sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+    when: docker_cgroup.stdout != kubeadm_cgroup.stdout
