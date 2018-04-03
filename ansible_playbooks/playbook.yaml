@@ -39,9 +39,11 @@
   - name: collecting cgroup info of docker
     shell: docker info | grep -i cgroup
     register: docker_cgroup
+  - debug: msg={{ docker_cgroup }}
   - name: collecting cgroup info of installed kubeadm
     shell: cat /etc/systemd/system/kubelet.service.d/10-kubeadm.conf | grep "cgroup-driver="
     register: kubeadm_cgroup
+  - debug: msg={{ kubeadm_cgroup }}
   - name: Configure cgroup driver used by kubelet
     shell: sed -i "s/cgroup-driver=systemd/cgroup-driver=cgroupfs/g" /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
     when: docker_cgroup.stdout != kubeadm_cgroup.stdout
